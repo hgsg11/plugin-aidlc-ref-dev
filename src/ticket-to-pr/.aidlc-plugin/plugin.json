@@ -1,0 +1,15 @@
+{
+  "name": "ticket-to-pr",
+  "version": "0.1.0",
+  "description": "A GitHub issue to pull request workflow with explicit scope confirmation, implementation, tests, and four independent reviews.",
+  "author": { "name": "hgsg11" },
+  "dependencies": ["core"],
+  "aidlc": {
+    "contributes": {
+      "stages": "stages/",
+      "overlays": "contributions/",
+      "scopes": "scopes/",
+      "agents": "agents/"
+    }
+  }
+}
