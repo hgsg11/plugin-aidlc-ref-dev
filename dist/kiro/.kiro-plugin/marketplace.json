@@ -1,0 +1,15 @@
+{
+  "name": "aidlc-ref-dev",
+  "owner": {
+    "name": "hgsg11"
+  },
+  "description": "AIDLC plugin catalogue.",
+  "plugins": [
+    {
+      "name": "aidlc-backlog-refinement",
+      "source": ".",
+      "version": "0.1.0",
+      "description": "Refines a user story against an existing implementation, creates reviewable screen prototypes, and outputs a tool-adapted implementation map."
+    }
+  ]
+}

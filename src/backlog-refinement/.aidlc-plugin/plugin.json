@@ -1,0 +1,14 @@
+{
+  "name": "backlog-refinement",
+  "version": "0.1.0",
+  "description": "Refines a user story against an existing implementation, creates reviewable screen prototypes, and outputs a tool-adapted implementation map.",
+  "author": { "name": "hgsg11" },
+  "dependencies": ["core"],
+  "aidlc": {
+    "contributes": {
+      "stages": "stages/",
+      "overlays": "contributions/",
+      "scopes": "scopes/"
+    }
+  }
+}

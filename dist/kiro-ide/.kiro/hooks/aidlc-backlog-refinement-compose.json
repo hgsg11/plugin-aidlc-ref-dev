@@ -1,0 +1,14 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "aidlc-backlog-refinement-compose",
+      "trigger": "SessionStart",
+      "description": "Composes the backlog-refinement AIDLC plugin at session start.",
+      "action": {
+        "type": "command",
+        "command": "bun ./hooks/aidlc-plugin-compose.ts .kiro kiro-ide"
+      }
+    }
+  ]
+}
