@@ -28,9 +28,6 @@ requires_stage:
   - ticket-to-pr-ai-slop-review
 scopes:
   - ticket-to-pr-work-item
-ars:
-  targets: [ua]
-  cost: 2
 inputs: Confirmed issue brief, verified test results, and all four passing review reports
 outputs: ticket-to-pr-pull-request.md (under this stage's record dir, engine-resolved)
 ---

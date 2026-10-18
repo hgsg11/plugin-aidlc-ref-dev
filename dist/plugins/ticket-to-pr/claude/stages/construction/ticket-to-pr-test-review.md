@@ -20,9 +20,6 @@ requires_stage:
   - build-and-test
 scopes:
   - ticket-to-pr-work-item
-ars:
-  targets: [ve]
-  cost: 2
 inputs: Acceptance criteria, test source diff, and build/test results
 outputs: ticket-to-pr-test-review-report.md (under this stage's record dir, engine-resolved)
 ---

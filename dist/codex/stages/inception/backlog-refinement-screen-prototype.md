@@ -26,9 +26,6 @@ requires_stage:
   - user-stories
 scopes:
   - backlog-refinement-story
-ars:
-  targets: [iae, ua]
-  cost: 3
 inputs: Confirmed requirements and stories, readiness findings, and existing implementation analysis
 outputs: Mockup source and screenshot under this stage's engine-resolved record directory
 ---

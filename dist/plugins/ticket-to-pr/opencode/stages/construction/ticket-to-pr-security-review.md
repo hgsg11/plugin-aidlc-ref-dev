@@ -23,9 +23,6 @@ requires_stage:
   - ticket-to-pr-test-review
 scopes:
   - ticket-to-pr-work-item
-ars:
-  targets: [r]
-  cost: 3
 inputs: Implemented source diff, approved requirements, and build/test evidence
 outputs: ticket-to-pr-security-review-report.md (under this stage's record dir, engine-resolved)
 ---
