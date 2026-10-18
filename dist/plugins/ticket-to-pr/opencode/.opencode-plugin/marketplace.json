@@ -8,7 +8,7 @@
     {
       "name": "aidlc-ticket-to-pr",
       "source": ".",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "description": "A GitHub issue to pull request workflow with explicit scope confirmation, implementation, tests, and four independent reviews."
     }
   ]
