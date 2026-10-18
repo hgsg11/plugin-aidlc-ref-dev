@@ -20,9 +20,6 @@ requires_stage:
   - ticket-to-pr-security-review
 scopes:
   - ticket-to-pr-work-item
-ars:
-  targets: [ve]
-  cost: 2
 inputs: Implemented source diff, repository standards, approved requirements, and prior review report
 outputs: ticket-to-pr-coding-standards-review-report.md (under this stage's record dir, engine-resolved)
 ---

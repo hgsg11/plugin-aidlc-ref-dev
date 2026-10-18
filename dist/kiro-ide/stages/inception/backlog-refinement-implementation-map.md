@@ -29,9 +29,6 @@ requires_stage:
   - backlog-refinement-screen-prototype
 scopes:
   - backlog-refinement-story
-ars:
-  targets: [csu, ve]
-  cost: 2
 inputs: Approved story and screen prototype, existing implementation findings, requirements, and readiness review
 outputs: Reviewed implementation map in the project-selected destination and a Markdown record under this stage's engine-resolved record directory
 ---

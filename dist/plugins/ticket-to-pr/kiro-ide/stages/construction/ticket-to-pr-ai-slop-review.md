@@ -18,9 +18,6 @@ requires_stage:
   - ticket-to-pr-coding-standards-review
 scopes:
   - ticket-to-pr-work-item
-ars:
-  targets: [ve]
-  cost: 2
 inputs: Implemented source diff, original ticket, repository instructions, and prior review reports
 outputs: ticket-to-pr-ai-slop-review-report.md (under this stage's record dir, engine-resolved)
 ---
