@@ -30,12 +30,14 @@ outputs: ticket-to-pr-ai-slop-review-report.md (under this stage's record dir, e
 
 Read the AI Slop Reviewer persona. Inspect the current branch diff and the
 original ticket. Check for unsupported assumptions, scope creep, speculative
-abstractions or fallbacks, dead code, duplicated validation, invented APIs,
-and comments that merely restate the implementation. Ground every finding in
-the request, a caller, a repository invariant, or nearby code.
+abstractions or fallbacks, swallowed failures, type or lint escapes, dead
+code, duplicated validation, invented APIs, placeholders, leftover working
+artifacts, mock-only tests, and comments that merely restate or narrate the
+implementation. Ground every finding in the request, a caller, a repository
+invariant, or nearby code.
 
-Do not modify source files. Do not label code as slop based on style, author,
-or use of AI.
+Do not modify source files while reviewing; Step 3 applies fixes. Do not label
+code as slop based on style, author, or use of AI.
 
 ### Step 2: Record Findings
 
@@ -44,9 +46,25 @@ REQUIRED`, each finding's file and line, the missing requirement or concrete
 redundancy, and the smallest correction. Include limitations. Use `PASS` only
 when no evidence-backed findings remain.
 
-If changes are required, present the findings for correction and rerun this
-review after the changes. Do not advance with an unresolved finding. Once the
-verdict is `PASS`, run `{{INVOKE}} engine orchestrate report --stage ticket-to-pr-ai-slop-review --result awaiting-approval`, present the report, and record the person's response through the orchestrator.
+### Step 3: Resolve Findings
+
+When the verdict is `CHANGES REQUIRED`, do not end the stage and do not ask the
+person whether to fix the findings. Fix every finding, rerun the tests recorded
+in the Build and Test results, and repeat Steps 1 and 2 against the updated
+change. Record each round's number and the findings it fixed in the report.
+Allow at most three fix rounds. If the verdict is still `CHANGES REQUIRED`
+after the third round's review, stop the workflow: do not report this stage
+complete, run later stages, or create a pull request. Present the remaining
+findings to the person and end the turn.
+
+### Step 4: Complete the Stage
+
+Once the verdict is `PASS`, run
+`{{INVOKE}} engine orchestrate report --stage ticket-to-pr-ai-slop-review --result awaiting-approval`.
+When `Construction Autonomy Mode` is `autonomous` in the state file, report
+`--result approved` without `--user-input` and continue without asking the
+person. Otherwise present the report and record the person's response
+through the orchestrator.
 
 ## Sensors
 

@@ -5,9 +5,9 @@ This repository distributes two AIDLC plugins:
 - `backlog-refinement` investigates a user story, clarifies open questions,
   creates a browser-viewable screen prototype for review, and produces an
   implementation map in a format suited to the project.
-- `ticket-to-pr` clarifies a GitHub issue's implementation boundary, implements
-  it with tests, passes test, security, coding standards, and AI Slop reviews,
-  then creates a pull request.
+- `ticket-to-pr` derives requirements from a GitHub issue without a separate
+  confirmation step, implements them with tests, passes test, security, coding
+  standards, and AI Slop reviews, then creates a pull request.
 
 The plugin requires an AIDLC installation in the host repository. Select the
 `backlog-refinement-story` scope when starting a refinement workflow.

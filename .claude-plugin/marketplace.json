@@ -8,14 +8,14 @@
     {
       "name": "aidlc-backlog-refinement",
       "source": ".",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "description": "Refines a user story against an existing implementation, creates reviewable screen prototypes, and outputs a tool-adapted implementation map."
     },
     {
       "name": "aidlc-ticket-to-pr",
       "source": "./dist/plugins/ticket-to-pr/claude",
-      "version": "0.1.0",
-      "description": "Takes a GitHub issue through scope confirmation, implementation, tests, four reviews, and pull request creation."
+      "version": "0.1.2",
+      "description": "Takes a GitHub issue through ticket-derived requirements, implementation, tests, four reviews, and pull request creation."
     }
   ]
 }

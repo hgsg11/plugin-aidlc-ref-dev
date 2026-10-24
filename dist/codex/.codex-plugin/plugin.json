@@ -1,6 +1,6 @@
 {
   "name": "aidlc-backlog-refinement",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Refines a user story against an existing implementation, creates reviewable screen prototypes, and outputs a tool-adapted implementation map.",
   "author": {
     "name": "hgsg11"

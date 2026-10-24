@@ -36,8 +36,9 @@ naming, formatting, error handling, test conventions, layering, and consistency
 with established patterns. Limit findings to actionable violations in changed
 code; do not impose personal style preferences or recommend broad rewrites.
 
-Do not modify source files. Verify any claimed lint or format result by running
-the repository's documented command when available.
+Do not modify source files while reviewing; Step 3 applies fixes. Verify any
+claimed lint or format result by running the repository's documented command
+when available.
 
 ### Step 2: Record Findings
 
@@ -47,9 +48,25 @@ or concrete inconsistency, and a specific correction. Include checks run and
 limitations. Use `PASS` only when no actionable coding-standards findings
 remain.
 
-If changes are required, present the findings for correction and rerun this
-review after the changes. Do not advance with an unresolved finding. Once the
-verdict is `PASS`, run `{{INVOKE}} engine orchestrate report --stage ticket-to-pr-coding-standards-review --result awaiting-approval`, present the report, and record the person's response through the orchestrator.
+### Step 3: Resolve Findings
+
+When the verdict is `CHANGES REQUIRED`, do not end the stage and do not ask the
+person whether to fix the findings. Fix every finding, rerun the tests recorded
+in the Build and Test results, and repeat Steps 1 and 2 against the updated
+change. Record each round's number and the findings it fixed in the report.
+Allow at most three fix rounds. If the verdict is still `CHANGES REQUIRED`
+after the third round's review, stop the workflow: do not report this stage
+complete, run later stages, or create a pull request. Present the remaining
+findings to the person and end the turn.
+
+### Step 4: Complete the Stage
+
+Once the verdict is `PASS`, run
+`{{INVOKE}} engine orchestrate report --stage ticket-to-pr-coding-standards-review --result awaiting-approval`.
+When `Construction Autonomy Mode` is `autonomous` in the state file, report
+`--result approved` without `--user-input` and continue without asking the
+person. Otherwise present the report and record the person's response
+through the orchestrator.
 
 ## Sensors
 
