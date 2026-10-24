@@ -36,8 +36,9 @@ behavior rather than implementation details, and failure cases are covered
 where the criterion requires them. Look for vacuous assertions, tests that
 always pass, and mocking that removes the behavior under test.
 
-Do not modify application or test files. Report only actionable findings tied
-to an acceptance criterion or a concrete test-quality defect.
+Do not modify application or test files while reviewing; Step 3 applies
+fixes. Report only actionable findings tied to an acceptance criterion or a
+concrete test-quality defect.
 
 ### Step 2: Record Findings
 
@@ -45,10 +46,26 @@ Write `ticket-to-pr-test-review-report.md` with verdict `PASS` or `CHANGES
 REQUIRED`, each finding's test file and line, the criterion or test property at
 issue, and a specific correction. Include checks run and limitations. Use
 `PASS` only when every applicable criterion has meaningful test coverage.
-If changes are required, present findings for correction, rerun Build and Test,
-and rerun this review after the changes. Do not advance with unresolved
-findings. Once the verdict is `PASS`, run
-`{{INVOKE}} engine orchestrate report --stage ticket-to-pr-test-review --result awaiting-approval`, present the report, and record the person's response through the orchestrator.
+
+### Step 3: Resolve Findings
+
+When the verdict is `CHANGES REQUIRED`, do not end the stage and do not ask the
+person whether to fix the findings. Fix every finding, rerun the tests recorded
+in the Build and Test results, and repeat Steps 1 and 2 against the updated
+change. Record each round's number and the findings it fixed in the report.
+Allow at most three fix rounds. If the verdict is still `CHANGES REQUIRED`
+after the third round's review, stop the workflow: do not report this stage
+complete, run later stages, or create a pull request. Present the remaining
+findings to the person and end the turn.
+
+### Step 4: Complete the Stage
+
+Once the verdict is `PASS`, run
+`{{INVOKE}} engine orchestrate report --stage ticket-to-pr-test-review --result awaiting-approval`.
+When `Construction Autonomy Mode` is `autonomous` in the state file, report
+`--result approved` without `--user-input` and continue without asking the
+person. Otherwise present the report and record the person's response
+through the orchestrator.
 
 ## Sensors
 

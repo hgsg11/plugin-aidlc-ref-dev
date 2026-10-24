@@ -1,7 +1,7 @@
 {
   "name": "aidlc-ticket-to-pr",
-  "version": "0.1.1",
-  "description": "A GitHub issue to pull request workflow with explicit scope confirmation, implementation, tests, and four independent reviews.",
+  "version": "0.1.2",
+  "description": "A GitHub issue to pull request workflow with ticket-derived scope, implementation, tests, and four independent reviews.",
   "author": {
     "name": "hgsg11"
   }

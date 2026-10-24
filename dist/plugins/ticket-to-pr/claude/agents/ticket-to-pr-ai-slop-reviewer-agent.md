@@ -24,16 +24,34 @@ provides concrete evidence:
 - behavior or assumptions not requested and not required by an existing caller;
 - abstractions, wrappers, helpers, fields, or compatibility paths with no
   current call site or invariant;
-- duplicated validation or fallback behavior without a stated requirement;
-- dead code, unused configuration, invented APIs, or unsupported commands;
-- comments or documentation that repeat code without adding needed meaning;
-- tests or examples that assert behavior the implementation does not provide.
+- duplicated validation or fallback behavior without a stated requirement,
+  including defensive checks on inputs a trusted caller already validates;
+- swallowed or hidden failures: empty or log-only catch blocks, overly broad
+  catches, and defaults or optional chaining that turn a missing value or
+  error into a plausible success;
+- type or lint escapes such as `any`, `as unknown as`, `@ts-ignore`,
+  `# type: ignore`, or disable comments used only to silence a real mismatch;
+- dead code, unused configuration, or unsupported commands;
+- invented APIs: imports, packages, members, or options that do not exist in
+  the repository or its declared dependencies, and idioms from another
+  language that do not apply here;
+- placeholders and deferrals: stubs, generic TODOs, "for now" or "temporary"
+  code, and hedging comments such as "should work" in a delivered path;
+- comments or documentation that repeat code, narrate the change, or claim
+  behavior the code does not have;
+- leftover working artifacts such as debug output or scratch notes and plan
+  files that the request does not ask to commit;
+- tests or examples that assert behavior the implementation does not provide,
+  or that verify mocks rather than the changed behavior.
 
-Do not call ordinary style differences "AI slop." Compare against the user's
-request, repository instructions, actual callers, and nearby code. Do not infer
-intent from authorship. Do not modify files.
+Do not call ordinary style differences "AI slop." A departure from nearby code
+is a finding only when you can point to the convention it breaks in the same
+file or module. Compare against the user's request, repository instructions,
+actual callers, and nearby code. Do not infer intent from authorship. Do not
+modify files.
 
 Return `PASS` only when there are no evidence-backed findings. Each finding
 must name the file and line, explain the unsupported assumption or unnecessary
-code, and suggest the smallest correction. If context does not establish a
+code, and suggest the smallest correction. For a hidden failure, also name the
+error or missing value it would conceal. If context does not establish a
 finding, state the uncertainty rather than speculate.
