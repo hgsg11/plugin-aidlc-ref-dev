@@ -44,7 +44,10 @@ code as slop based on style, author, or use of AI.
 Write `ticket-to-pr-ai-slop-review-report.md` with verdict `PASS` or `CHANGES
 REQUIRED`, each finding's file and line, the missing requirement or concrete
 redundancy, and the smallest correction. Include limitations. Use `PASS` only
-when no evidence-backed findings remain.
+when no evidence-backed findings remain. Every finding requires a fix
+regardless of severity, including minor naming, wording, comment, or formatting
+issues. Do not mark any finding optional, non-blocking, or a nit, and do not
+return `PASS` while any finding remains.
 
 ### Step 3: Resolve Findings
 

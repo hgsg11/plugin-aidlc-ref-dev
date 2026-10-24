@@ -45,7 +45,10 @@ concrete test-quality defect.
 Write `ticket-to-pr-test-review-report.md` with verdict `PASS` or `CHANGES
 REQUIRED`, each finding's test file and line, the criterion or test property at
 issue, and a specific correction. Include checks run and limitations. Use
-`PASS` only when every applicable criterion has meaningful test coverage.
+`PASS` only when every applicable criterion has meaningful test coverage. Every
+finding requires a fix regardless of severity, including minor naming, wording,
+comment, or formatting issues. Do not mark any finding optional, non-blocking,
+or a nit, and do not return `PASS` while any finding remains.
 
 ### Step 3: Resolve Findings
 
