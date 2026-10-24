@@ -49,7 +49,10 @@ use.
 Write `ticket-to-pr-security-review-report.md` with verdict `PASS` or `CHANGES
 REQUIRED`, each finding's severity, file and line, concrete impact, and a
 specific remediation. Include checks run and limitations. Use `PASS` only when
-there are no unresolved security findings.
+there are no unresolved security findings. Every finding requires a fix
+regardless of severity, including minor naming, wording, comment, or formatting
+issues. Do not mark any finding optional, non-blocking, or a nit, and do not
+return `PASS` while any finding remains.
 
 ### Step 3: Resolve Findings
 

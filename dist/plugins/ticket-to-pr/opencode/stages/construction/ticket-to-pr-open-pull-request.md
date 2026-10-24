@@ -64,7 +64,7 @@ prepared title and body. Record the resulting PR URL. If the command fails,
 report the error and do not claim a PR exists.
 
 Write `ticket-to-pr-pull-request.md` with the title, URL, linked issue,
-review/test evidence, and any remaining non-blocking limitations. Run
+review/test evidence, and any limitations of the checks that were run. Run
 `{{INVOKE}} engine orchestrate report --stage ticket-to-pr-open-pull-request --result awaiting-approval`
 and present the PR URL and report. When `Construction Autonomy Mode` is
 `autonomous` in the state file, report `--result approved` without

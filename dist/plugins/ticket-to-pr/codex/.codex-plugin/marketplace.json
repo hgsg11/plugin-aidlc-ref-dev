@@ -8,7 +8,7 @@
     {
       "name": "aidlc-ticket-to-pr",
       "source": ".",
-      "version": "0.1.2",
+      "version": "0.1.3",
       "description": "A GitHub issue to pull request workflow with ticket-derived scope, implementation, tests, and four independent reviews."
     }
   ]

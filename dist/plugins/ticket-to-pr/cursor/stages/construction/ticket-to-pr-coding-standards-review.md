@@ -46,7 +46,10 @@ Write `ticket-to-pr-coding-standards-review-report.md` with verdict `PASS` or
 `CHANGES REQUIRED`, each finding's file and line, the violated repository rule
 or concrete inconsistency, and a specific correction. Include checks run and
 limitations. Use `PASS` only when no actionable coding-standards findings
-remain.
+remain. Every finding requires a fix regardless of severity, including minor
+naming, wording, comment, or formatting issues. Do not mark any finding
+optional, non-blocking, or a nit, and do not return `PASS` while any finding
+remains.
 
 ### Step 3: Resolve Findings
 

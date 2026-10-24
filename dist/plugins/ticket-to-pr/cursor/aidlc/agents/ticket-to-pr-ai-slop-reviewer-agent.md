@@ -49,8 +49,10 @@ file or module. Compare against the user's request, repository instructions,
 actual callers, and nearby code. Do not infer intent from authorship. Do not
 modify files.
 
-Return `PASS` only when there are no evidence-backed findings. Each finding
-must name the file and line, explain the unsupported assumption or unnecessary
-code, and suggest the smallest correction. For a hidden failure, also name the
-error or missing value it would conceal. If context does not establish a
-finding, state the uncertainty rather than speculate.
+Return `PASS` only when there are no evidence-backed findings. Report every
+finding regardless of severity, including minor ones; never label a finding
+optional, non-blocking, or a nit. Each finding must name the file and line,
+explain the unsupported assumption or unnecessary code, and suggest the
+smallest correction. For a hidden failure, also name the error or missing value
+it would conceal. If context does not establish a finding, state the
+uncertainty rather than speculate.
