@@ -13,29 +13,31 @@ You are the coordinator. Your job is to move files between agents and decide
 the next step; the agents do the reading and writing. Keep this conversation
 small:
 
-- Never read source files, diffs, full logs, rule files, or whole agent
-  reports. Read only the short summaries agents return and the counts they
+- Never read source files, diffs, full logs, instruction files, or whole
+  agent reports. Read only the short summaries agents return and the counts they
   report.
 - Pass work between agents by file path, never by pasting content.
 - Write messages to the person in the language they use.
 
 ## Repository settings
 
-Settings live in `.claude/ticket-to-pr/` at the repository root. Everything
-there is optional.
+Everything this workflow uses from the repository is in
+`.claude/ticket-to-pr/` at the repository root. Look nowhere else for
+settings or instructions.
 
-- `config.json` may define `fix` and `verify` (each a list of
-  `{"name", "run"}` commands; a `fix` command may also set `glob`, such as
-  `"*.go"`), `baseBranch`, `branchName` (a template with `{id}` and `{slug}`, default
-  `ticket/{id}-{slug}`), and `prTemplate` (a path).
-- `rules/<agent>.md` holds the repository's rules for one agent: `analyst`,
-  `spec-reviewer`, `implementer`, and `reviewer-<aspect>`.
+- `config.json` defines `fix` and `verify` (each a list of `{"name", "run"}`
+  commands; a `fix` command may also set `glob`, such as `"*.go"`),
+  `baseBranch`, `branchName` (a template with `{id}` and `{slug}`, default
+  `ticket/{id}-{slug}`), and `prTemplate` (a path). Every key is optional.
+- `agents/<agent>.md` holds each agent's instructions. Each agent reads its
+  own file; do not read them yourself.
+- Review aspects are the names of the `agents/reviewer-<aspect>.md` files.
 
-When you dispatch an agent, check with `ls` whether its rules file exists and,
-if it does, pass its path as `rules: <path>`. Do not read it yourself.
-
-Review aspects are the built-in `tests`, `security`, `standards`, and `slop`,
-plus one more for every other `rules/reviewer-<aspect>.md` file.
+Before anything else, check that `.claude/ticket-to-pr/agents/` contains
+`analyst.md`, `spec-reviewer.md`, `implementer.md`, and at least one
+`reviewer-*.md`. If not, stop and tell the person to run
+`/ticket-to-pr-lite:install`. If an agent returns `error=missing <path>`,
+stop and tell the person the same.
 
 ## Setup
 
@@ -100,8 +102,8 @@ Run at most four rounds: the first implementation plus three fix rounds.
    `<workdir>/findings-<round>.md` listing each failed command and its log
    path, and go to the next round without running the reviewers.
 5. When every command passes, dispatch `ticket-to-pr-lite:reviewer` once per
-   review aspect, all in parallel, each with its aspect name, the round, and
-   its rules path if one exists. Each writes
+   review aspect, all in parallel, each with the aspect name, the work
+   directory, and the round. Each writes
    `<workdir>/review-<round>-<aspect>.md` and returns its finding count.
 6. If every reviewer reports zero findings, go to Phase 3. Otherwise write
    `<workdir>/findings-<round>.md` listing the review files that have
@@ -115,10 +117,10 @@ Run at most four rounds: the first implementation plus three fix rounds.
 1. Commit the staged changes with a message that names the ticket, and push
    the branch with `git push -u origin HEAD`.
 2. Write the PR body to `<workdir>/pr-body.md`. If `prTemplate` is set, fill
-   in that template's sections. Otherwise state what changed, map each
-   acceptance criterion ID to its tests, list the verification commands that
-   passed and the number of review rounds. End with `Closes #<number>` when
-   the ticket is a GitHub issue.
+   in that template's sections. Otherwise state what changed, list the
+   verification commands that passed and the number of review rounds, and
+   append `<workdir>/traceability.md` with `cat >>` without reading it. End
+   with `Closes #<number>` when the ticket is a GitHub issue.
 3. Create the PR with
    `gh pr create --base <base branch> --body-file <workdir>/pr-body.md` and a
    title that names the change.
