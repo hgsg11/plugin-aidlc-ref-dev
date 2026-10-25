@@ -1,6 +1,7 @@
 # AIDLC Refinement Development
 
-This repository distributes two AIDLC plugins:
+This repository distributes two AIDLC plugins and one standalone Claude Code
+plugin:
 
 - `backlog-refinement` investigates a user story, clarifies open questions,
   creates a browser-viewable screen prototype for review, and produces an
@@ -8,8 +9,12 @@ This repository distributes two AIDLC plugins:
 - `ticket-to-pr` derives requirements from a GitHub issue without a separate
   confirmation step, implements them with tests, passes test, security, coding
   standards, and AI Slop reviews, then creates a pull request.
+- `ticket-to-pr-lite` does not need AIDLC. It checks the issue's spec for
+  contradictions, asks the person once, then loops implementation,
+  verification, and four reviews in fresh-context agents and opens a pull
+  request. See `plugins/ticket-to-pr-lite/README.md`.
 
-The plugin requires an AIDLC installation in the host repository. Select the
+The AIDLC plugins require an AIDLC installation in the host repository. Select the
 `backlog-refinement-story` scope when starting a refinement workflow.
 
 ## Install in Claude Code
@@ -18,6 +23,7 @@ The plugin requires an AIDLC installation in the host repository. Select the
 /plugin marketplace add hgsg11/plugin-aidlc-ref-dev
 /plugin install aidlc-backlog-refinement@aidlc-ref-dev
 /plugin install aidlc-ticket-to-pr@aidlc-ref-dev
+/plugin install ticket-to-pr-lite@aidlc-ref-dev
 ```
 
 ## Install in Codex

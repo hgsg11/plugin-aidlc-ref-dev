@@ -16,6 +16,12 @@
       "source": "./dist/plugins/ticket-to-pr/claude",
       "version": "0.1.3",
       "description": "Takes a GitHub issue through ticket-derived requirements, implementation, tests, four reviews, and pull request creation."
+    },
+    {
+      "name": "ticket-to-pr-lite",
+      "source": "./plugins/ticket-to-pr-lite",
+      "version": "0.1.0",
+      "description": "Lightweight ticket-to-PR without AIDLC: spec contradiction check, one approval, then an implement-verify-review loop in fresh-context agents."
     }
   ]
 }
