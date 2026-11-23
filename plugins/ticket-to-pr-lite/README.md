@@ -71,8 +71,9 @@ The implementer follows rules first and the nearby code second:
    of setters, keep logic in the class that owns the data, enforce each
    business rule in one place, leave state unchanged when an operation is
    rejected, choose implementations in one place instead of caller-side
-   switches, do not merge code with different purposes, and name classes
-   for their role and operations for their result.
+   switches, keep business decisions out of factories, do not merge code
+   with different purposes, and name classes for their role and operations
+   for their result.
 3. The nearby code's conventions, only where no rule applies. A pattern in
    the nearby code that breaks a rule is not copied.
 

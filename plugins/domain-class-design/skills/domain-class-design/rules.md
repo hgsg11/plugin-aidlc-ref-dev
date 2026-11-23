@@ -35,14 +35,17 @@
 12. Name an interface for its caller's purpose. Draw no interface when there
     is one implementation and no evidence of another.
 13. Do not make enforcing one rule require walking through many classes.
+14. Draw a factory when creating an object needs validation or assembly of
+    several objects. Select strategy implementations in one factory or
+    registry, and keep business rules out of it.
 
 ## Naming
 
-14. Name a class for its role in its context, an operation for its result,
+15. Name a class for its role in its context, an operation for its result,
     and an event in the past tense.
-15. Treat Manager, Service, Common, Base, Data, Info, Util, And, and Or in a
+16. Treat Manager, Service, Common, Base, Data, Info, Util, And, and Or in a
     name as a sign to split the class.
-16. When many members do not fit a class's name, split the class instead of
+17. When many members do not fit a class's name, split the class instead of
     renaming it.
 
 ## Validity checks

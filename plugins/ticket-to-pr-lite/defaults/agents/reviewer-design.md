@@ -22,6 +22,9 @@ hidden failures belong to the AI slop review; do not report them here.
 - **Caller-side selection**: a caller switches on a type code to choose
   behavior that one factory, DI binding, or registry should choose. A short
   input guard is fine as an `if`.
+- **Overloaded factory**: a factory makes business decisions that belong
+  in the model or a policy, or a type-code switch moved into a factory
+  without a class for each kind's behavior.
 - **False sharing**: code with different purposes is merged into one shared
   function only because it looks alike.
 - **Failure side effects**: a rejected operation still changes stored

@@ -1,6 +1,6 @@
 {
   "name": "domain-class-design",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Designs a domain model as a Mermaid class diagram from purpose-driven modeling rules, then judges whether the diagram can solve the stated problem.",
   "author": {
     "name": "hgsg11"

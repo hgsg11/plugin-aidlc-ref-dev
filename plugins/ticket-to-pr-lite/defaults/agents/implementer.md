@@ -36,7 +36,9 @@ How to implement and test the approved spec. Edit freely.
      message, charge, or notification.
    - Choose between implementations in one factory, DI binding, or
      registry, not with type-code switches in callers. A short input guard
-     can stay an `if`.
+     can stay an `if`. A factory only selects and assembles; keep business
+     decisions in the model or a policy, and give each kind its own class
+     instead of moving the switch into the factory.
    - Do not merge code with different purposes because it looks alike.
    - Name classes for their role and operations for their result; avoid
      Manager, Data, Info, Util, `process`, `execute`, And, and Or.
