@@ -1,7 +1,7 @@
 # AIDLC Refinement Development
 
-This repository distributes two AIDLC plugins and one standalone Claude Code
-plugin:
+This repository distributes two AIDLC plugins and two standalone Claude Code
+plugins:
 
 - `backlog-refinement` investigates a user story, clarifies open questions,
   creates a browser-viewable screen prototype for review, and produces an
@@ -11,8 +11,11 @@ plugin:
   standards, and AI Slop reviews, then creates a pull request.
 - `ticket-to-pr-lite` does not need AIDLC. It checks the issue's spec for
   contradictions, asks the person once, then loops implementation,
-  verification, and four reviews in fresh-context agents and opens a pull
+  verification, and five reviews in fresh-context agents and opens a pull
   request. See `plugins/ticket-to-pr-lite/README.md`.
+- `domain-class-design` does not need AIDLC. It designs a domain model as a
+  Mermaid class diagram and judges whether the diagram can solve the stated
+  problem. See `plugins/domain-class-design/README.md`.
 
 The AIDLC plugins require an AIDLC installation in the host repository. Select the
 `backlog-refinement-story` scope when starting a refinement workflow.
@@ -24,6 +27,7 @@ The AIDLC plugins require an AIDLC installation in the host repository. Select t
 /plugin install aidlc-backlog-refinement@aidlc-ref-dev
 /plugin install aidlc-ticket-to-pr@aidlc-ref-dev
 /plugin install ticket-to-pr-lite@aidlc-ref-dev
+/plugin install domain-class-design@aidlc-ref-dev
 ```
 
 ## Install in Codex

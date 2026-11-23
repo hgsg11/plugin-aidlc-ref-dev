@@ -8,7 +8,10 @@ Personal preference is not a finding.
 - **Repository instructions**: CLAUDE.md, CONTRIBUTING, and linter and
   formatter configuration.
 - **Consistency with nearby code**: naming, file placement, import style,
-  layering, and the error-handling pattern the surrounding code uses.
+  layering, and the error-handling pattern the surrounding code uses, where
+  no rule applies. Rules come first: do not report code that departs from
+  nearby code to follow CLAUDE.md, the linters, or the design rules in
+  `implementer.md`.
 - **Compatibility**: public signatures preserved, or every caller and import
   updated; new parameters optional with backward-compatible defaults; shared
   helpers changed without breaking their other callers; a migration for
