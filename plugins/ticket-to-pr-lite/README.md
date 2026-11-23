@@ -28,6 +28,7 @@ detects the repository's commands:
     reviewer-security.md   security review
     reviewer-standards.md  standards review
     reviewer-slop.md       AI slop review
+    reviewer-design.md     design review
   .installed               what the install skill placed, for updates
 ```
 
@@ -59,6 +60,35 @@ Asking Claude to implement an issue and open a PR also starts it.
    fix rounds; anything left after that stops the run without a PR.
 4. **Pull request.** The coordinator commits, pushes, and opens the PR with
    the criterion-to-test mapping.
+
+## Coding rules
+
+The implementer follows rules first and the nearby code second:
+
+1. CLAUDE.md and the linters.
+2. The design rules in `implementer.md`: validate in constructors so an
+   invalid object cannot exist, expose intent-revealing operations instead
+   of setters, keep logic in the class that owns the data, enforce each
+   business rule in one place, leave state unchanged when an operation is
+   rejected, choose implementations in one place instead of caller-side
+   switches, do not merge code with different purposes, and name classes
+   for their role and operations for their result.
+3. The nearby code's conventions, only where no rule applies. A pattern in
+   the nearby code that breaks a rule is not copied.
+
+The design rules apply to the code a ticket adds or modifies; untouched code
+is not restructured. The standards review follows the same order and does not
+report code that departs from nearby code to follow a rule.
+
+Each review aspect checks its own concern, without overlap:
+
+| Aspect | Checks |
+|---|---|
+| `design` | The design rules above |
+| `slop` | Unrequested scope, speculative abstractions, duplicated code, hidden failures, and leftovers |
+| `standards` | Repository instructions, consistency with nearby code, compatibility, and error handling |
+| `tests` | Criterion coverage, assertion strength, error and boundary cases, test doubles, and isolation |
+| `security` | Access control, injection, input validation, secrets, sensitive data, and dependencies |
 
 ## Customize
 
@@ -112,7 +142,8 @@ reads only its own checklist.
 
 The default checklists adapt material from AWS AI-DLC's knowledge files: the
 corner checklist, the testing and security guides, the brownfield code
-generation guide, and the reviewer guides.
+generation guide, and the reviewer guides. The design rules adapt the
+purpose-driven design ideas from minodriven's public talks.
 
 ## Requirements
 
