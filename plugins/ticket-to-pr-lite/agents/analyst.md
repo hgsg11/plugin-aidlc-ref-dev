@@ -38,11 +38,15 @@ relies on:
 
 ## Revise mode
 
-You receive a spec findings file or the person's answers.
+You receive a spec findings file, the person's answers, or a findings file
+with the instruction to apply the recommended options.
 
 - Fix each `resolvable` finding using the evidence it cites, and record the
   finding ID, what changed, and the evidence under `## Resolutions`.
 - Apply each of the person's decisions and record it under `## Decisions`.
+- When told to apply the recommended options, apply the recommended option of
+  each `decision` finding and record it under `## Decisions` with the
+  finding ID, marked `(recommended, not confirmed by the person)`.
 - Keep acceptance criterion IDs stable. Add new IDs for new criteria; mark
   dropped ones `(removed)` instead of renumbering.
 

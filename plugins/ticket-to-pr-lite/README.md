@@ -1,9 +1,13 @@
 # ticket-to-pr-lite
 
-A Claude Code plugin that takes a GitHub issue to a pull request without AIDLC.
-It checks the spec for contradictions before any code is written, asks the
-person once, then loops implementation, verification, and review until the
-change is clean.
+A Claude Code plugin that implements a GitHub issue without AIDLC. It loops
+implementation, verification, and review until the change is clean.
+
+By default it asks the person nothing: it treats the issue as the spec and
+ends with a commit, without pushing or opening a pull request, so the caller
+decides how the change is delivered. In a Paracell cell, `paracell review`
+opens the pull request. `config.json` can add a spec check, a one-time
+approval, and a pull request.
 
 ## Install in a repository
 
@@ -19,10 +23,11 @@ detects the repository's commands:
 
 ```text
 .claude/ticket-to-pr/
-  config.json              fix, verify, baseBranch, branchName, prTemplate
+  config.json              spec, delivery, fix, verify, baseBranch,
+                           branchName, prTemplate
   agents/
-    analyst.md             how specs are written
-    spec-reviewer.md       what the spec check looks for
+    analyst.md             how specs are written (spec: check, approve)
+    spec-reviewer.md       what the spec check looks for (spec: check, approve)
     implementer.md         how to implement and test
     reviewer-tests.md      tests review
     reviewer-security.md   security review
@@ -41,25 +46,37 @@ team uses the same files.
 /ticket-to-pr-lite:ticket-to-pr https://github.com/owner/repo/issues/123
 ```
 
-Asking Claude to implement an issue and open a PR also starts it.
+Asking Claude to implement an issue also starts it. With the default
+`spec: ticket`, the run never stops to ask: write the issue with its
+acceptance criteria or a completion checklist before starting it.
 
 ## Flow
 
-1. **Spec.** The analyst writes `spec.md` with acceptance criteria (`AC1`,
-   `AC2`, ...). A separate spec reviewer checks it for contradictions,
-   conflicts with the code and documentation, ambiguity, untestable criteria,
-   and unsettled corner cases. Findings the code answers are fixed
-   automatically, for at most three rounds.
-2. **One approval.** The person answers the design decisions the spec reviewer
-   raised and approves the spec.
-3. **Implement and verify.** The implementer writes the change, its tests,
+1. **Spec**, by `spec` in `config.json`:
+   - `ticket` (default): the coordinator saves the issue title and body as
+     `spec.md` without reading it. Nothing is checked or asked. The
+     implementer numbers the acceptance criteria `AC1`, `AC2`, ... when they
+     have no IDs.
+   - `check`: the analyst writes `spec.md` with acceptance criteria. A
+     separate spec reviewer checks it for contradictions, conflicts with the
+     code and documentation, ambiguity, untestable criteria, and unsettled
+     corner cases. Findings the code answers are fixed automatically, for at
+     most three rounds. Design decisions take the reviewer's recommended
+     option and are recorded in the spec as not confirmed. Nothing is asked.
+   - `approve`: the same check, then the person answers the design decisions
+     and approves the spec once.
+2. **Implement and verify.** The implementer writes the change, its tests,
    and `traceability.md` (criterion to tests). The coordinator runs the `fix`
    commands, then the `verify` commands; only when they pass do the reviewers
    run in parallel, one per `agents/reviewer-*.md` file. Every finding must be
    fixed, however minor. The loop allows the first implementation plus three
-   fix rounds; anything left after that stops the run without a PR.
-4. **Pull request.** The coordinator commits, pushes, and opens the PR with
-   the criterion-to-test mapping.
+   fix rounds; anything left after that stops the run without a commit.
+3. **Deliver**, by `delivery` in `config.json`:
+   - `commit` (default): the coordinator commits the change and reports the
+     criterion-to-test mapping in `traceability.md`. It does not push or open
+     a pull request.
+   - `pr`: the coordinator also pushes and opens the PR with the
+     criterion-to-test mapping, filling `prTemplate` when it is set.
 
 ## Coding rules
 
@@ -99,10 +116,12 @@ Each review aspect checks its own concern, without overlap:
 - **Add a review aspect**: add `agents/reviewer-<aspect>.md`, for example
   `reviewer-performance.md`, with its checklist.
 - **Remove a review aspect**: delete its `reviewer-*.md` file.
-- **Commands and branches**: edit `config.json`.
+- **Spec, delivery, commands, and branches**: edit `config.json`.
 
 ```json
 {
+  "spec": "ticket",
+  "delivery": "commit",
   "fix": [
     { "name": "format", "run": "gofmt -w {files}", "glob": "*.go" }
   ],
@@ -131,6 +150,10 @@ After a plugin update, run `/ticket-to-pr-lite:install` again. It updates the
 files the repository has not edited, keeps edited files and prints a `diff`
 command for each, does not re-add files the repository deleted, and never
 touches files the repository added.
+
+From 0.3.0 the default no longer asks for approval or opens a pull request.
+To keep the 0.2 behavior, set `"spec": "approve"` and `"delivery": "pr"` in
+`config.json`.
 
 ## Why it is cheap
 

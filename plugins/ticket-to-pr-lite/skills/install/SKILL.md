@@ -40,7 +40,9 @@ the settings and write it:
   files and set `glob` to the file types each tool accepts.
 - **baseBranch**: the default branch, from `gh repo view --json defaultBranchRef`.
 - **prTemplate**: `.github/pull_request_template.md` if it exists; otherwise
-  omit the key.
+  omit the key. It is used only when `delivery` is `pr`.
+- Leave `spec` and `delivery` out: the defaults (`ticket`, `commit`) run
+  without asking and end with a commit.
 
 ```json
 {
@@ -54,12 +56,17 @@ the settings and write it:
 ## 3. Report
 
 Show the script's output and the detected commands, and ask the person to
-check the commands. Then explain:
+check the commands: by default the `ticket-to-pr` skill runs them without
+asking, and it stops when `config.json` has no `verify` command. Then explain:
 
 - `.claude/ticket-to-pr/agents/<agent>.md` is each agent's whole set of
   instructions; edit it directly to change what that agent does or checks.
 - Adding `agents/reviewer-<aspect>.md` adds a review aspect that runs in
   parallel with the others; deleting a `reviewer-*.md` file removes that
   aspect.
+- `spec` in `config.json` chooses how the spec is made: `ticket` (default,
+  the ticket text as is), `check` (spec check, no questions), or `approve`
+  (spec check and one approval). `delivery` chooses how the run ends:
+  `commit` (default) or `pr` (push and open a pull request).
 - Commit `.claude/ticket-to-pr/` so the whole team uses the same files.
 - After a plugin update, run this skill again to bring in new defaults.

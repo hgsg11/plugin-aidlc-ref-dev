@@ -1,6 +1,6 @@
 # Implementation
 
-How to implement and test the approved spec. Edit freely.
+How to implement and test the spec. Edit freely.
 
 1. Before writing code, map the change: the files you will
    touch, the call chain from entry point to storage, the existing tests for
