@@ -1,7 +1,7 @@
 {
   "name": "ticket-to-pr-lite",
-  "version": "0.2.1",
-  "description": "Checks a GitHub issue's spec for contradictions, then loops implementation, verification, and five reviews in fresh-context agents until clean, and opens a pull request.",
+  "version": "0.3.0",
+  "description": "Implements a GitHub issue by looping implementation, verification, and five reviews in fresh-context agents until clean. By default it asks nothing and ends with a commit; a spec check, one approval, and a pull request are configurable.",
   "author": {
     "name": "hgsg11"
   }

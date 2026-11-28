@@ -1,6 +1,6 @@
 ---
 name: ticket-to-pr
-description: Takes a GitHub issue (URL, number, or pasted ticket text) to a pull request. Checks the spec for contradictions before coding, asks the person once to approve it, then loops implementation, verification, and reviews in fresh-context agents until clean. Use when the person asks to implement an issue or ticket and open a PR.
+description: Implements a GitHub issue (URL, number, or pasted ticket text) by looping implementation, verification, and reviews in fresh-context agents until clean. By default it asks the person nothing, treats the ticket as the spec, and ends with a commit; config.json can add a spec check, a one-time approval, and a pull request. Use when the person asks to implement an issue or ticket.
 argument-hint: "<issue URL | issue number | ticket text>"
 allowed-tools: ["Bash", "Read", "Write", "Agent", "Task", "AskUserQuestion"]
 ---
@@ -17,6 +17,8 @@ small:
   agent reports. Read only the short summaries agents return and the counts they
   report.
 - Pass work between agents by file path, never by pasting content.
+- Ask the person something only when `spec` is `approve`, and only in the
+  step that says so.
 - Write messages to the person in the language they use.
 
 ## Repository settings
@@ -25,19 +27,30 @@ Everything this workflow uses from the repository is in
 `.claude/ticket-to-pr/` at the repository root. Look nowhere else for
 settings or instructions.
 
-- `config.json` defines `fix` and `verify` (each a list of `{"name", "run"}`
-  commands; a `fix` command may also set `glob`, such as `"*.go"`),
-  `baseBranch`, `branchName` (a template with `{id}` and `{slug}`, default
-  `ticket/{id}-{slug}`), and `prTemplate` (a path). Every key is optional.
+- `config.json` holds these keys; every key is optional:
+  - `spec`: how the spec is made. `ticket` (default) uses the ticket text as
+    the spec. `check` has the analyst write a spec and the spec reviewer
+    check it, and settles open decisions by the recommended option without
+    asking. `approve` does the same check and then asks the person once.
+  - `delivery`: how the run ends. `commit` (default) commits and stops. `pr`
+    also pushes and opens a pull request.
+  - `fix` and `verify`: each a list of `{"name", "run"}` commands; a `fix`
+    command may also set `glob`, such as `"*.go"`.
+  - `baseBranch`; `branchName`, a template with `{id}` and `{slug}`, default
+    `ticket/{id}-{slug}`; and `prTemplate`, a path used when `delivery` is
+    `pr`.
 - `agents/<agent>.md` holds each agent's instructions. Each agent reads its
   own file; do not read them yourself.
 - Review aspects are the names of the `agents/reviewer-<aspect>.md` files.
 
-Before anything else, check that `.claude/ticket-to-pr/agents/` contains
-`analyst.md`, `spec-reviewer.md`, `implementer.md`, and at least one
-`reviewer-*.md`. If not, stop and tell the person to run
-`/ticket-to-pr-lite:install`. If an agent returns `error=missing <path>`,
-stop and tell the person the same.
+Before anything else, read `config.json` if it exists and check that
+`.claude/ticket-to-pr/agents/` contains `implementer.md` and at least one
+`reviewer-*.md`, plus `analyst.md` and `spec-reviewer.md` when `spec` is
+`check` or `approve`. When `spec` is `ticket`, `config.json` must also have
+at least one `verify` command. If any of this is missing, or `spec` or
+`delivery` has another value, stop and tell the person to run
+`/ticket-to-pr-lite:install` or fix `config.json`. If an agent returns
+`error=missing <path>`, stop and tell the person the same.
 
 ## Setup
 
@@ -47,13 +60,21 @@ stop and tell the person the same.
    text as `ticket.md` in the work directory.
 2. Create the work directory `.ticket-to-pr/<ticket id>/` and make sure git
    ignores it: add `.ticket-to-pr/` to `.git/info/exclude` if it is not there.
-3. Read `.claude/ticket-to-pr/config.json` if it exists. The base branch is
-   its `baseBranch`, otherwise the repository's default branch.
+3. The base branch is `baseBranch`, otherwise the repository's default branch.
 4. If the current branch is the base branch or the default branch, create and
    switch to a branch named from `branchName`. Record the base commit with
    `git merge-base HEAD origin/<base branch>` in `<workdir>/base.txt`.
 
 ## Phase 1: Spec
+
+### When `spec` is `ticket`
+
+Write the spec without reading it: for an issue, run
+`gh issue view <ref> --json title,body --template '# {{.title}}{{"\n\n"}}{{.body}}' > <workdir>/spec.md`;
+for pasted text, copy `<workdir>/ticket.md` to `<workdir>/spec.md`. Go to
+Phase 2.
+
+### When `spec` is `check` or `approve`
 
 1. Dispatch `ticket-to-pr-lite:analyst` in `write` mode with the ticket
    reference and the work directory. It writes `<workdir>/spec.md`.
@@ -66,20 +87,25 @@ stop and tell the person the same.
      It fixes the resolvable findings from evidence and records how.
    - Findings still `resolvable` after the third round become `decision`
      findings.
-3. Ask the person once with `AskUserQuestion`:
+3. When `spec` is `check` and there are `decision` findings, dispatch the
+   analyst in `revise` mode with the last findings file and the instruction
+   to apply the recommended option of each `decision` finding. It records
+   each one under `## Decisions` as not confirmed by the person. Do not ask
+   the person.
+4. When `spec` is `approve`, ask the person once with `AskUserQuestion`:
    - one question per `decision` finding (at most three; if there are more,
      list the rest in the message and ask for them in a single free-text
      question), using the options the spec reviewer proposed;
    - a final question: approve the spec (`Approve` / `Request changes`),
      showing the acceptance criteria IDs with one line each and the auto-fix
      and verification commands.
-4. If the person answered decisions or requested changes, dispatch the analyst
-   in `revise` mode with their answers, then run the spec reviewer once more.
-   Ask again only if new `decision` findings appear or the person asked for
-   changes. Do not start Phase 2 without an explicit `Approve`.
-5. If `config.json` has no `fix` or no `verify`, write the approved auto-fix
-   and verification commands from the spec into it, creating the file if
-   needed.
+
+   If the person answered decisions or requested changes, dispatch the
+   analyst in `revise` mode with their answers, then run the spec reviewer
+   once more. Ask again only if new `decision` findings appear or the person
+   asked for changes. Do not start Phase 2 without an explicit `Approve`.
+5. If `config.json` has no `fix` or no `verify`, write the auto-fix and
+   verification commands from the spec into it, creating the file if needed.
 
 ## Phase 2: Implement and verify
 
@@ -112,16 +138,21 @@ Run at most four rounds: the first implementation plus three fix rounds.
    push, or open a PR. Tell the person which checks or findings remain and
    where the files are.
 
-## Phase 3: Pull request
+## Phase 3: Deliver
 
-1. Commit the staged changes with a message that names the ticket, and push
-   the branch with `git push -u origin HEAD`.
-2. Write the PR body to `<workdir>/pr-body.md`. If `prTemplate` is set, fill
-   in that template's sections. Otherwise state what changed, list the
-   verification commands that passed and the number of review rounds, and
-   append `<workdir>/traceability.md` with `cat >>` without reading it. End
-   with `Closes #<number>` when the ticket is a GitHub issue.
-3. Create the PR with
-   `gh pr create --base <base branch> --body-file <workdir>/pr-body.md` and a
-   title that names the change.
-4. Report the PR URL to the person.
+1. Commit the staged changes with a message that names the ticket.
+2. When `delivery` is `commit`, stop here. Do not push or open a pull
+   request; delivery belongs to whoever started this workflow. Report the
+   commit, the verification commands that passed, the number of rounds, and
+   the path of `<workdir>/traceability.md`.
+3. When `delivery` is `pr`:
+   1. Push the branch with `git push -u origin HEAD`.
+   2. Write the PR body to `<workdir>/pr-body.md`. If `prTemplate` is set,
+      fill in that template's sections. Otherwise state what changed, list
+      the verification commands that passed and the number of review rounds,
+      and append `<workdir>/traceability.md` with `cat >>` without reading
+      it. End with `Closes #<number>` when the ticket is a GitHub issue.
+   3. Create the PR with
+      `gh pr create --base <base branch> --body-file <workdir>/pr-body.md`
+      and a title that names the change.
+   4. Report the PR URL to the person.

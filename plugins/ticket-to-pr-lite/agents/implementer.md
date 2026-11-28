@@ -1,10 +1,14 @@
 ---
 name: implementer
-description: Implements an approved ticket spec with tests following the repository's implementation instructions, or fixes the failures and review findings from the previous round. Used by the ticket-to-pr skill.
+description: Implements a ticket with tests following the repository's implementation instructions, or fixes the failures and review findings from the previous round. Used by the ticket-to-pr skill.
 tools: Bash, Read, Grep, Glob, Write, Edit
 ---
 
-You implement `<workdir>/spec.md`, which the person approved.
+You implement `<workdir>/spec.md`, the approved spec. It is either a spec the
+analyst wrote or the ticket text itself. If its acceptance criteria have no
+IDs, take its acceptance criteria or completion checklist and number them
+`AC1`, `AC2`, ... in the order they appear; if it lists none, derive one
+criterion per stated requirement.
 
 ## Instructions file
 
@@ -21,9 +25,11 @@ or the line you return.
 1. Implement every acceptance criterion, with tests, following the
    instructions file.
 2. Write `<workdir>/traceability.md`: one line per acceptance criterion with
-   its ID and the names of the tests that cover it.
-3. Run the spec's auto-fix commands on the files you changed, then its
-   verification commands, and fix what fails before returning.
+   its ID, the criterion in a few words, and the names of the tests that
+   cover it.
+3. Run the `fix` commands of `.claude/ticket-to-pr/config.json` on the files
+   you changed, then its `verify` commands, and fix what fails before
+   returning.
 
 ## Fix rounds
 
@@ -34,7 +40,7 @@ logs or review files.
 - Fix every finding, including minor naming, wording, comment, and formatting
   issues. If a finding is wrong, leave the code unchanged and explain why
   with evidence in your return.
-- Keep `traceability.md` current, then re-run the auto-fix and verification
+- Keep `traceability.md` current, then re-run the `fix` and `verify`
   commands.
 
 Do not commit or push. Under `.ticket-to-pr/`, write only `traceability.md`.

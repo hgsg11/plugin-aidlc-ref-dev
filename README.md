@@ -9,10 +9,11 @@ plugins:
 - `ticket-to-pr` derives requirements from a GitHub issue without a separate
   confirmation step, implements them with tests, passes test, security, coding
   standards, and AI Slop reviews, then creates a pull request.
-- `ticket-to-pr-lite` does not need AIDLC. It checks the issue's spec for
-  contradictions, asks the person once, then loops implementation,
-  verification, and five reviews in fresh-context agents and opens a pull
-  request. See `plugins/ticket-to-pr-lite/README.md`.
+- `ticket-to-pr-lite` does not need AIDLC. It loops implementation,
+  verification, and five reviews in fresh-context agents until clean. By
+  default it treats the issue as the spec, asks the person nothing, and ends
+  with a commit; a spec check, one approval, and a pull request are
+  configurable. See `plugins/ticket-to-pr-lite/README.md`.
 - `domain-class-design` does not need AIDLC. It designs a domain model as a
   Mermaid class diagram and judges whether the diagram can solve the stated
   problem. See `plugins/domain-class-design/README.md`.
